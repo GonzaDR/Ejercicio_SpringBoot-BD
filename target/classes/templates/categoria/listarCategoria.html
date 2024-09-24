@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xlms:th="http://www.thymeleaf.org">
+    <head>
+        <title>Site com Spring Categorias</title>
+    </head>
+    <body>
+        <h2>Site com Spring Categorias</h2>
+        <table border>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Categorias</th>
+                    <th colspan="2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="Categoria: ${categorias}">
+                    <td th:text="${Categoria.Id}"></td>
+                    <td th:text="${Categoria.Descripcion}"></td>
+                    <td><a th:href="@{/Categoria/editarCategoria/{Id} (Id=${Categoria.Id})}">Editar</a></td>
+                    <td><a th:href="@{/Categoria/excluirCategoria/{Id} (Id=${Categoria.Id})}">Excluir</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>    

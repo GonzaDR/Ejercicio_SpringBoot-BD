@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xlms:th="http://www.thymeleaf.org">
+    <head></head>
+    <body>
+        <h2>Editar Producto</h2>
+        <form method="post">
+	        <label for="nome">Nome:</label>
+	        <input type="text" name="nome" id="nome" th:value="${Nome}"/>
+	        <br />
+	        <label for="preco">Preço:</label>
+	        <input type="number" name="preco" id="preco" th:value="${Preco}"/>
+	        <br />
+	        <label for="categoria">Categoria_id:</label>
+	        <input type="number" name="categoria" id="categoria" th:value="${categoria}"/>
+	        <br />
+	        <button type="submit">Enviar</button>
+        </form>
+    </body>
+</html>

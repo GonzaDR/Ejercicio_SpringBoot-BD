@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xlms:th="http://www.thymeleaf.org">
+    <head></head>
+    <body>
+        <h2>Editar categorias</h2>
+        <form method="post">
+	        <label for="descripcion">Descripcion:</label>
+	        <input type="text" name="descripcion" id="descripcion" th:value="${Descripcion}"/>
+	        <br />
+	        <button type="submit">Enviar</button>
+        </form>
+    </body>
+</html>

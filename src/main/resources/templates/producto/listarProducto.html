@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xlms:th="http://www.thymeleaf.org">
+    <head>
+        <title>Site com Spring Productos</title>
+    </head>
+    <body>
+        <h2>Site com Spring Productos</h2>
+        <table border>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nome</th>
+                    <th>Preço</th>
+                    <th>Categoria_id</th>
+                    <th colspan="2">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="Producto: ${productos}">
+                    <td th:text="${Producto.Id}"></td>
+                    <td th:text="${Producto.Nome}"></td>
+                    <td th:text="${Producto.Preco}"></td>
+                    <td th:text="${Producto.Categoria.id}"></td>
+                    <td><a th:href="@{/Producto/editarProducto/{Id} (Id=${Producto.Id})}">Editar</a></td>
+                    <td><a th:href="@{/Producto/excluirProducto/{Id} (Id=${Producto.Id})}">Excluir</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
+</html>  
