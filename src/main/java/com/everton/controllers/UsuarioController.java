@@ -51,7 +51,7 @@ public class UsuarioController {
 			@RequestParam("file") MultipartFile imagen) {
 		if (result.hasErrors()) {
 			msg.addFlashAttribute("erroCadastrar", "Erro ao cadastrar novo usuário");
-			return "redirect:/usuario/inserir2/";
+			return "redirect:/usuario/inserir/";
 		}
 		var usuarioModel = new UsuarioModel();
 		BeanUtils.copyProperties(usuarioDTO, usuarioModel);
