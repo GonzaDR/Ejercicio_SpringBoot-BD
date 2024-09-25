@@ -12,12 +12,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.everton.dtos.UsuarioDto;
 import com.everton.models.UsuarioModel;
 import com.everton.repositories.UsuarioRepository;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import jakarta.validation.Valid;
 
@@ -40,14 +47,25 @@ public class UsuarioController {
 	@PostMapping("/inserir/")
 	public String inserirBD(
 			@ModelAttribute @Valid UsuarioDto usuarioDTO,
-			BindingResult result, RedirectAttributes msg) {
+			BindingResult result, RedirectAttributes msg,
+			@RequestParam("file") MultipartFile imagen) {
 		if (result.hasErrors()) {
 			msg.addFlashAttribute("erroCadastrar", "Erro ao cadastrar novo usuário");
-			return "redirect:/usuario/inserir/";
+			return "redirect:/usuario/inserir2/";
 		}
 		var usuarioModel = new UsuarioModel();
 		BeanUtils.copyProperties(usuarioDTO, usuarioModel);
 		usuarioModel.setTipo("comum");
+		try {
+			if (!imagen.isEmpty()) {
+				byte[] bytes = imagen.getBytes();
+				Path camino = Paths.get("src/main/resources/static/img/" + imagen.getOriginalFilename());
+				Files.write(camino, bytes);
+				usuarioModel.setImagen(imagen.getOriginalFilename());
+			}
+		} catch (IOException e) {
+			System.out.println("erro imagen");
+		}
 		repository.save(usuarioModel);
 		msg.addFlashAttribute("sucessoCadastrar", "Usuario cadastrado!");
 		return "redirect:../";
