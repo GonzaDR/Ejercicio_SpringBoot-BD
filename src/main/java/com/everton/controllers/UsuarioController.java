@@ -1,8 +1,13 @@
 package com.everton.controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.io.File;
+import java.nio.file.Paths;
 import java.util.List;
-
 import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -20,11 +26,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.everton.dtos.UsuarioDto;
 import com.everton.models.UsuarioModel;
 import com.everton.repositories.UsuarioRepository;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import jakarta.validation.Valid;
 
@@ -59,7 +60,10 @@ public class UsuarioController {
 		try {
 			if (!imagen.isEmpty()) {
 				byte[] bytes = imagen.getBytes();
-				Path camino = Paths.get("src/main/resources/static/img/" + imagen.getOriginalFilename());
+				System.out.println(imagen.getOriginalFilename());
+				Path camino = Paths
+						.get("/Users/gonzar/Downloads/Spring20242-main/everton/everton/src/main/resources/static/img/"
+								+ imagen.getOriginalFilename());
 				Files.write(camino, bytes);
 				usuarioModel.setImagen(imagen.getOriginalFilename());
 			}
@@ -68,7 +72,23 @@ public class UsuarioController {
 		}
 		repository.save(usuarioModel);
 		msg.addFlashAttribute("sucessoCadastrar", "Usuario cadastrado!");
-		return "redirect:../";
+		return "redirect:../listar/";
+	}
+
+	@PostMapping("/listar/")
+	public ModelAndView listarComFiltro(@RequestParam("busca") String busca) {
+		ModelAndView mv = new ModelAndView("usuario/listar");
+		List<UsuarioModel> lista = repository.findUsuarioByNomeLike("%" + busca + "%");
+		mv.addObject("usuarios", lista);
+		return mv;
+	}
+
+	@GetMapping("/listar/{tipo}")
+	public ModelAndView listarPorTipo(@PathVariable("tipo") String busca) {
+		ModelAndView mv = new ModelAndView("usuario/listar");
+		List<UsuarioModel> lista = repository.findUsuarioByTipo(busca);
+		mv.addObject("usuarios", lista);
+		return mv;
 	}
 
 	@GetMapping("/listar/")
@@ -77,6 +97,19 @@ public class UsuarioController {
 		List<UsuarioModel> lista = repository.findAll();
 		mv.addObject("usuarios", lista);
 		return mv;
+	}
+
+	@SuppressWarnings("null") // agrego esto
+	@GetMapping("/mostrarImagen/{img}")
+	@ResponseBody
+	public byte[] mostrarImagen(@PathVariable(value = "img") String img) throws IOException {
+		File imagenArchivo = new File(
+				"/Users/gonzar/Downloads/Spring20242-main/everton/everton/src/main/resources/static/img/" + img);// modifique
+																													// aca
+		if (img != null || img.trim().length() > 0) {
+			return Files.readAllBytes(imagenArchivo.toPath());
+		}
+		return null;
 	}
 
 	@GetMapping("/editar/{Id}")

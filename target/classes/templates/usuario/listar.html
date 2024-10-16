@@ -5,6 +5,17 @@
     </head>
     <body>
         <h2>Site com Spring</h2>
+        <th:block th:include="usuario/msg"></th:block>
+
+        <a href="/usuario/listar/comum">Comum</a>
+        <a href="/usuario/listar/admin">Admin</a>
+        <br>
+        <form method="POST" action="/usuario/listar/">
+            <label for="busca">Busca</label>
+            <input type="text" name="busca" id="busca" />
+            <button type="submit">Enviar</button>
+        </form>
+
         <table border>
             <thead>
                 <tr>
@@ -12,6 +23,7 @@
                     <th>Nome</th>
                     <th>Email</th>
                     <th>Tipo</th>
+                    <th>Foto</th>
                     <th colspan="2">Acciones</th>
                 </tr>
             </thead>
@@ -21,6 +33,7 @@
                     <td th:text="${usuario.Nome}"></td>
                     <td th:text="${usuario.Email}"></td>
                     <td th:text="${usuario.Tipo}"></td>
+                    <td><img th:src="@{/usuario/mostrarImagen/{img} (img=${usuario.imagen})}" alt=""></td>
                     <td><a th:href="@{/usuario/editar/{Id} (Id=${usuario.Id})}">Editar</a></td>
                     <td><a th:href="@{/usuario/excluir/{Id} (Id=${usuario.Id})}">Excluir</a></td>
                 </tr>
